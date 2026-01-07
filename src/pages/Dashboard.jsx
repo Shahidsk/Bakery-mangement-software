@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useEmployeeStore } from '../store/employeeStore';
+import { useAuthStore } from '../store/authStore';
 import { getTodayAttendanceSummary } from '../services/attendanceService';
 import { format } from 'date-fns';
 
 export default function Dashboard() {
     const { employees, fetchEmployees } = useEmployeeStore();
+    const { logout } = useAuthStore();
     const [attendanceSummary, setAttendanceSummary] = useState({ presentCount: 0, absentCount: 0, totalMarked: 0 });
     const [loading, setLoading] = useState(true);
 
@@ -19,7 +21,11 @@ export default function Dashboard() {
         loadData();
     }, [fetchEmployees]);
 
-    const activeEmployees = employees.filter(e => e.isActive);
+    const activeEmployees = employees.filter(e => e.is_active);
+
+    const handleLogout = async () => {
+        await logout();
+    };
 
     if (loading) {
         return (
@@ -34,9 +40,21 @@ export default function Dashboard() {
         <div className="page-wrapper fade-in">
             <div className="container">
                 {/* Header */}
-                <div className="page-header">
-                    <p className="page-subtitle">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
-                    <h1 className="page-title">Dashboard</h1>
+                <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                        <p className="page-subtitle">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+                        <h1 className="page-title">Dashboard</h1>
+                    </div>
+                    <button
+                        onClick={handleLogout}
+                        className="btn btn-sm btn-secondary"
+                        style={{ marginTop: '0.25rem' }}
+                    >
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Logout
+                    </button>
                 </div>
 
                 {/* Stats */}
