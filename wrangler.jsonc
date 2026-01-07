@@ -1,6 +1,6 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "bakery-management",
+    "name": "bakery-mangement-software",
     "compatibility_date": "2026-01-07",
     "assets": {
         "directory": "./dist",
