@@ -89,3 +89,4 @@ wrangler pages deploy dist --project-name=bakery-management
 ## License
 
 MIT
+
